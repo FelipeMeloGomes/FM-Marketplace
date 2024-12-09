@@ -21,3 +21,12 @@ export interface DummyProduct {
   thumbnail: string;
   images: string[];
 }
+
+export interface ShippingOption {
+  id: string;
+  company: {
+    name: string;
+  };
+  price: number;
+  delivery_time: string;
+}

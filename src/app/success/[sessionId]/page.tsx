@@ -9,7 +9,7 @@ interface SuccessProps {
     sessionId: string;
   };
 }
-export default function Success({ params }: SuccessProps) {
+export default function Success({}: SuccessProps) {
   const { clearCart } = useShoppingCart();
 
   useEffect(() => {

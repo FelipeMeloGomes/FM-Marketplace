@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardContent,
@@ -30,13 +31,12 @@ export default function ProductCard({
   price,
   currency,
   image,
-  images,
 }: ProductCardProps) {
   const { addItem } = useShoppingCart();
   const { toast } = useToast();
 
   const formattedPrice = formatCurrencyString({
-    value: Number(price),
+    value: typeof price === "string" ? parseFloat(price) : price,
     currency,
     language: "pt-BR",
   });
@@ -47,7 +47,7 @@ export default function ProductCard({
       name,
       description,
       id,
-      price: Number(price),
+      price: typeof price === "string" ? parseFloat(price) : price,
       currency,
       image,
     });
@@ -62,11 +62,11 @@ export default function ProductCard({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-center min-h-[4rem]">
-          {name}e
+          {name}
         </CardTitle>
         <CardDescription className="relative w-full h-60">
           <Image
-            src={image}
+            src={image || "/placeholder.png"}
             fill
             sizes="100%"
             alt={name}
