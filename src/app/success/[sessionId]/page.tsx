@@ -1,21 +1,22 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useShoppingCart } from "use-shopping-cart";
 
 interface SuccessProps {
-  params: {
-    sessionId: string;
-  };
+  params: Promise<{ sessionId: string }>;
 }
-export default function Success({}: SuccessProps) {
+export default function Success({ params }: SuccessProps) {
   const { clearCart } = useShoppingCart();
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   useEffect(() => {
+    params.then((resolvedParams) => {
+      setSessionId(resolvedParams.sessionId);
+    });
     const timeout = setTimeout(() => {
       clearCart();
-      console.log("Carrinho limpo após delay.");
     }, 100);
 
     return () => clearTimeout(timeout);
