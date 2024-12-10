@@ -1,8 +1,8 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { useEffect } from "react";
 import { useShoppingCart } from "use-shopping-cart";
-import { Check } from "lucide-react";
 
 interface SuccessProps {
   params: {
@@ -13,7 +13,12 @@ export default function Success({}: SuccessProps) {
   const { clearCart } = useShoppingCart();
 
   useEffect(() => {
-    clearCart();
+    const timeout = setTimeout(() => {
+      clearCart();
+      console.log("Carrinho limpo após delay.");
+    }, 100);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
