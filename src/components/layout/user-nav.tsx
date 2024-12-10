@@ -1,5 +1,7 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,8 +11,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut, signIn, useSession } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function UserNav() {
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+
+  const handleAuthClick = () => {
+    if (isAuthenticated) {
+      signOut({ callbackUrl: "/login" });
+    } else {
+      signIn();
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,7 +50,21 @@ export default function UserNav() {
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleAuthClick}>
+          {isAuthenticated ? (
+            <Button
+              className={cn(buttonVariants({ variant: "ghost" }), "ml-auto")}
+            >
+              Sair
+            </Button>
+          ) : (
+            <Button
+              className={cn(buttonVariants({ variant: "ghost" }), "ml-auto")}
+            >
+              Entrar
+            </Button>
+          )}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

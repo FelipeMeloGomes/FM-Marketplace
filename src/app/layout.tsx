@@ -1,3 +1,4 @@
+import AuthProvider from "@/components/layout/auth-provider";
 import Header from "@/components/layout/header";
 import AppCartProvider from "@/components/shop/app-cart-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -21,11 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(oxygem.className, "min-h-screen flex flex-col")}>
-        <AppCartProvider>
-          <Toaster />
-          <Header />
-          <main className="flex-grow">{children}</main>
-        </AppCartProvider>
+        <AuthProvider>
+          <AppCartProvider>
+            <Toaster />
+            <Header />
+            <main className="flex-grow">{children}</main>
+          </AppCartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

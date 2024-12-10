@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Loader, MinusCircle, PlusCircle, Trash2 } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 import { useShoppingCart } from "use-shopping-cart";
@@ -25,8 +26,13 @@ export default function Cart() {
     incrementItem,
   } = useShoppingCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const { status } = useSession();
 
   async function checkout() {
+    if (status !== "authenticated") {
+      signIn();
+      return;
+    }
     setIsCheckingOut(true);
     const response = await fetch("/api/checkout", {
       method: "POST",
