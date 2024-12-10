@@ -24,8 +24,6 @@ export async function POST(request: NextRequest) {
 
   const line_items = validateCartItems(products, cartDetails);
 
-  console.log(line_items);
-
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     payment_method_types: ["card"],
