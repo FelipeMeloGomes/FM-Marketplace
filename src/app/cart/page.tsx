@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Loader, MinusCircle, PlusCircle, Trash2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
@@ -18,7 +19,7 @@ import { useShoppingCart } from "use-shopping-cart";
 export default function Cart() {
   const {
     cartCount,
-    cartDetails,
+    cartDetails = {},
     redirectToCheckout,
     removeItem,
     decrementItem,
@@ -26,34 +27,71 @@ export default function Cart() {
     incrementItem,
   } = useShoppingCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [selectedShipping, setSelectedShipping] = useState<any | null>(null);
+  const { toast } = useToast();
   const { status } = useSession();
+
+  const totalPrice = Object.keys(cartDetails).reduce(
+    (total, key) =>
+      total +
+      (cartDetails[key]?.value ?? 0) * (cartDetails[key]?.quantity ?? 0),
+    0,
+  );
+
+  const totalWithShipping = totalPrice + (Number(selectedShipping?.price) || 0);
 
   async function checkout() {
     if (status !== "authenticated") {
       signIn();
       return;
     }
+
+    if (!selectedShipping) {
+      toast({
+        title: "Oops",
+        description: "Selecione uma opção de frete.",
+        variant: "destructive",
+      });
+
+      return;
+    }
+
     setIsCheckingOut(true);
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cartDetails),
-    });
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartDetails,
+          shippingOption: selectedShipping,
+          total: totalWithShipping,
+        }),
+      });
 
-    const { id } = await response.json();
-
-    const result = await redirectToCheckout(id);
-    setIsCheckingOut(false);
+      const { id } = await response.json();
+      if (!id) {
+        console.error("Erro ao obter ID da sessão de checkout");
+        return;
+      }
+      await redirectToCheckout(id);
+    } catch (error) {
+      console.error("Erro ao finalizar o checkout:", error);
+      alert("Houve um erro ao finalizar sua compra. Tente novamente.");
+    } finally {
+      setIsCheckingOut(false);
+    }
   }
 
   function handleRemoveItem(itemId: string) {
     removeItem(itemId);
   }
+
   function handleClearCart() {
     clearCart();
   }
+
   function handleRemoveOneItem(itemId: string, currentQuantity: number) {
     if (currentQuantity > 1) {
       decrementItem(itemId);
@@ -61,6 +99,7 @@ export default function Cart() {
       removeItem(itemId);
     }
   }
+
   function handleIncrementItem(itemId: string) {
     incrementItem(itemId);
   }
@@ -74,80 +113,88 @@ export default function Cart() {
           Seu carrinho está vazio.
         </p>
       ) : (
-        Object.keys(cartDetails).map((key) => (
-          <Card key={key}>
-            <CardHeader>
-              <CardTitle className="tracking-wider">
-                {cartDetails[key].name} ({cartDetails[key].quantity})
-              </CardTitle>
-              <CardDescription className="text-md tracking-wide">
-                {cartDetails[key].description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="flex flex-col items-center gap-4 justify-between space-x-4 sm:flex-row sm:gap ">
-                <div className="flex items-center space-x-4 ">
-                  <div className="relative w-28 h-28">
-                    <Image
-                      priority
-                      src={cartDetails[key].image || ""}
-                      fill
-                      alt={cartDetails[key].name}
-                      className="object-contain"
-                    />
+        <>
+          {Object.keys(cartDetails).map((key) => {
+            const item = cartDetails[key];
+            if (!item) return null;
+            return (
+              <Card key={key}>
+                <CardHeader>
+                  <CardTitle className="tracking-wider">
+                    {item.name} ({item.quantity})
+                  </CardTitle>
+                  <CardDescription className="text-md tracking-wide">
+                    {item.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-6">
+                  <div className="flex flex-col items-center gap-4 justify-between space-x-4 sm:flex-row sm:gap">
+                    <div className="flex items-center space-x-4">
+                      <div className="relative w-28 h-28">
+                        <Image
+                          priority
+                          src={item.image || ""}
+                          fill
+                          alt={item.name}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-md font-medium leading-none">
+                          Preço
+                        </p>
+                        <p className="text-md text-muted-foreground">
+                          {item.formattedValue}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-6 items-center">
+                      <MinusCircle
+                        className="text-blue-400 hover:text-blue-600 cursor-pointer"
+                        onClick={() => handleRemoveOneItem(key, item.quantity)}
+                      />
+                      <div className="text-center">
+                        <p className="text-md tracking-wide">Qtdd</p>
+                        <p>{item.quantity}</p>
+                      </div>
+                      <PlusCircle
+                        className="text-green-400 hover:text-green-600 cursor-pointer"
+                        onClick={() => handleIncrementItem(key)}
+                      />
+                      <Trash2
+                        className="text-red-400 hover:text-red-600 cursor-pointer"
+                        onClick={() => handleRemoveItem(key)}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-md font-medium leading-none">Preço</p>
-                    <p className="text-md text-muted-foreground">
-                      {cartDetails[key].formattedValue}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-6 ">
-                  <MinusCircle
-                    className="text-blue-400 hover:text-blue-600 cursor-pointer"
-                    onClick={() =>
-                      handleRemoveOneItem(key, cartDetails[key].quantity)
-                    }
-                  />
-                  <div className="flex flex-col items-center">
-                    <p className="text-md tracking-wide">Qtdd</p> (
-                    {cartDetails[key].quantity})
-                  </div>
-                  <PlusCircle
-                    className="text-red-400 hover:text-red-600 cursor-pointer"
-                    onClick={() => handleIncrementItem(key)}
-                  />
-                  <div className="flex flex-col gap-2">
-                    <p className="text-md font-medium leading-none">Preço</p>
-                    <p className="text-bold tracking-wide text-green-800">
-                      {" "}
-                      {cartDetails[key].formattedValue}
-                    </p>
-                  </div>
-                  <Trash2
-                    className="text-red-400 hover:text-red-600 cursor-pointer"
-                    onClick={() => handleRemoveItem(key)}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))
+                </CardContent>
+              </Card>
+            );
+          })}
+          <div className="text-right">
+            <p>Subtotal: R$ {totalPrice}</p>
+            <p>
+              Frete: R${" "}
+              {selectedShipping?.price ? selectedShipping.price : "0,00"}
+            </p>
+            <p className="font-bold">Total: R$ {totalWithShipping}</p>
+          </div>
+        </>
       )}
       <div
         className={cn(
-          "flex  flex-col items-center justify-between gap-5 sm:flex-row sm:w-full",
+          "flex flex-col sm:flex-row sm:w-full justify-between items-center gap-4 sm:gap-5",
           cartCount === undefined || cartCount <= 0 ? "hidden" : "",
         )}
       >
-        <ShippingCalculator />
-        <div className="flex  space-x-4 ">
+        <ShippingCalculator onShippingChange={setSelectedShipping} />
+        <div className="flex gap-4 w-full sm:w-auto justify-center">
           <Button
             variant={"default"}
             onClick={handleClearCart}
             size={"lg"}
             disabled={isCheckingOut}
+            className="w-full sm:w-auto"
           >
             Limpar Carrinho
           </Button>
@@ -156,11 +203,11 @@ export default function Cart() {
             size={"lg"}
             onClick={checkout}
             disabled={isCheckingOut}
+            className="w-full sm:w-auto"
           >
             {isCheckingOut ? (
               <div className="flex items-center justify-between gap-2">
-                <Loader className="animate-spin 2s repeat-infinite" />{" "}
-                Finalizando...
+                <Loader className="animate-spin" /> Finalizando...
               </div>
             ) : (
               "Finalizar"

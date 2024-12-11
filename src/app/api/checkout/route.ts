@@ -4,9 +4,21 @@ import Stripe from "stripe";
 import { Product } from "use-shopping-cart/core";
 import { validateCartItems } from "use-shopping-cart/utilities";
 
+interface CartItem {
+  value: number;
+  quantity: number;
+}
+
 export async function POST(request: NextRequest) {
-  const cartDetails = await request.json();
+  const { cartDetails, shippingOption } = await request.json();
   const baseUrl = request.headers.get("origin");
+
+  if (!shippingOption || !shippingOption.price) {
+    return NextResponse.json(
+      { error: "Selecione uma opção de frete válida." },
+      { status: 400 },
+    );
+  }
 
   const stripeInventory = await stripe.products.list({
     expand: ["data.default_price"],
@@ -23,6 +35,25 @@ export async function POST(request: NextRequest) {
   });
 
   const line_items = validateCartItems(products, cartDetails);
+
+  let totalCartValueInCents = 0;
+
+  for (const item of Object.values(cartDetails) as CartItem[]) {
+    totalCartValueInCents += item.value * item.quantity;
+  }
+
+  const shippingPriceInCents = Math.round((shippingOption.price || 0) * 100);
+
+  line_items.push({
+    price_data: {
+      currency: "brl",
+      product_data: {
+        name: `Frete - ${shippingOption.company.name}`,
+      },
+      unit_amount: shippingPriceInCents,
+    },
+    quantity: 1,
+  });
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",

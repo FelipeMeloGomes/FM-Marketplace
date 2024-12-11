@@ -6,13 +6,19 @@ import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { ShippingOption } from "../../../types";
 
-export default function ShippingCalculator() {
+interface ShippingCalculatorProps {
+  onShippingChange: (option: ShippingOption) => void;
+}
+
+export default function ShippingCalculator({
+  onShippingChange,
+}: ShippingCalculatorProps) {
   const [postalCode, setPostalCode] = useState<string>("");
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [selectedShipping, setSelectedShipping] =
     useState<ShippingOption | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const cepRegex = /^\d{8}$/;
+  const cepRegex = /^\d{5}-\d{3}$/;
   const { toast } = useToast();
 
   const handleCalculateShipping = async () => {
@@ -22,7 +28,6 @@ export default function ShippingCalculator() {
         description: "Por favor, insira um CEP válido no formato 00000-000.",
         variant: "destructive",
       });
-
       return;
     }
 
@@ -78,7 +83,7 @@ export default function ShippingCalculator() {
         setShippingOptions(data.shippingOptions);
       } else {
         toast({
-          title: "Error",
+          title: "Erro",
           description: "Erro ao calcular frete. Tente novamente.",
           variant: "destructive",
         });
@@ -86,7 +91,7 @@ export default function ShippingCalculator() {
     } catch (error) {
       console.error("Erro ao calcular frete:", error);
       toast({
-        title: "Error",
+        title: "Erro",
         description: "Erro ao calcular frete. Tente novamente.",
         variant: "destructive",
       });
@@ -97,6 +102,9 @@ export default function ShippingCalculator() {
 
   const handleShippingSelect = (option: ShippingOption) => {
     setSelectedShipping(option);
+    if (onShippingChange) {
+      onShippingChange(option);
+    }
   };
 
   return (
@@ -112,7 +120,7 @@ export default function ShippingCalculator() {
         </Button>
         <Input
           id="postal-code"
-          type="number"
+          type="text"
           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
           placeholder="CEP* - 0000-0000"
@@ -137,8 +145,12 @@ export default function ShippingCalculator() {
               </span>
             )}
             <div>
-              <strong>{option.company.name}</strong>: R$ {option.price} -{" "}
-              {option.delivery_time} dias úteis
+              {parseInt(option.delivery_time) > 0 && (
+                <div>
+                  <strong>{option.company.name}</strong>: R$ {option.price} -{" "}
+                  {option.delivery_time} dias úteis
+                </div>
+              )}
             </div>
           </div>
         ))}

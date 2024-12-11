@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut, signIn, useSession } from "next-auth/react";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function UserNav() {
   const { data: session, status } = useSession();
@@ -50,19 +48,11 @@ export default function UserNav() {
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleAuthClick}>
+        <DropdownMenuItem onClick={handleAuthClick} className="cursor-pointer">
           {isAuthenticated ? (
-            <Button
-              className={cn(buttonVariants({ variant: "ghost" }), "ml-auto")}
-            >
-              Sair
-            </Button>
+            <DropdownMenuItem>Sair</DropdownMenuItem>
           ) : (
-            <Button
-              className={cn(buttonVariants({ variant: "ghost" }), "ml-auto")}
-            >
-              Entrar
-            </Button>
+            <DropdownMenuItem>Entrar</DropdownMenuItem>
           )}
         </DropdownMenuItem>
       </DropdownMenuContent>
