@@ -14,6 +14,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { formatCurrencyString, useShoppingCart } from "use-shopping-cart";
 import { ProductCardProps } from "../../../types";
+import { ShoppingCart } from "lucide-react";
 
 export default function ProductCard({
   id,
@@ -66,35 +67,32 @@ export default function ProductCard({
 
   return (
     <Card>
+      <CardDescription className="relative h-60 w-full ">
+        <Image
+          src={image}
+          sizes="100%"
+          fill
+          alt={name}
+          className="object-contain "
+        />
+      </CardDescription>
       <CardHeader>
-        <CardTitle className="flex items-center justify-center min-h-[4rem]">
-          {name}
-        </CardTitle>
-        <CardDescription className="relative w-full h-60">
-          <Image
-            src={image || ""}
-            fill
-            sizes="100%"
-            alt={name}
-            className="object-contain"
-          />
-        </CardDescription>
+        <CardTitle>{name}</CardTitle>
       </CardHeader>
-      <CardContent className="flex items-center justify-center">
-        <p className="min-h-[6rem]">{description}</p>
+      <CardContent>
+        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="mt-2 text-lg font-bold">{formattedPrice}</p>
       </CardContent>
-      <CardFooter className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Preço</p>
-          <p className="font-bold">{formattedPrice}</p>
-        </div>
+      <CardFooter>
         <Button
+          className="w-full"
           size={"lg"}
           variant={"default"}
           onClick={addToCart}
           disabled={isAdding}
           aria-label={`Adicionar ${name} ao carrinho`}
         >
+          <ShoppingCart className="mr-2 h-4 w-4" />{" "}
           {isAdding ? "Adicionando..." : "Comprar"}
         </Button>
       </CardFooter>
