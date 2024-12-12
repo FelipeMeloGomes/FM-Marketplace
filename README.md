@@ -30,6 +30,12 @@ O **FM Marketplace** é um projeto de **marketplace** criado com o intuito de es
 
 ---
 
+# Novas Funcionalidades
+
+- **formatação de valores monetário**:
+
+---
+
 ## 📂 Estrutura de Diretórios
 
 ```bash
