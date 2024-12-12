@@ -1,14 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle } from "lucide-react";
 import { useState } from "react";
-import { ShippingOption } from "../../../types";
-
-interface ShippingCalculatorProps {
-  onShippingChange: (option: ShippingOption) => void;
-}
+import { ShippingCalculatorProps, ShippingOption } from "../../../types";
+import ShippingInput from "./shipping-input";
 
 export default function ShippingCalculator({
   onShippingChange,
@@ -18,19 +14,9 @@ export default function ShippingCalculator({
   const [selectedShipping, setSelectedShipping] =
     useState<ShippingOption | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const cepRegex = /^\d{5}-\d{3}$/;
   const { toast } = useToast();
 
   const handleCalculateShipping = async () => {
-    if (!postalCode || !cepRegex.test(postalCode)) {
-      toast({
-        title: "CEP inválido",
-        description: "Por favor, insira um CEP válido no formato 00000-000.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
       const response = await fetch("/api/calculate-shipping", {
@@ -118,12 +104,10 @@ export default function ShippingCalculator({
         >
           {isLoading ? "Calculando..." : "Calcular Frete"}
         </Button>
-        <Input
-          id="postal-code"
-          type="text"
+
+        <ShippingInput
           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
-          placeholder="CEP* - 0000-0000"
         />
       </div>
 
