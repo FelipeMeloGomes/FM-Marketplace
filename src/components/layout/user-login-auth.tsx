@@ -9,13 +9,8 @@ import { cn } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { IUser, UserAuthFormProps } from "../../../types";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-interface IUser {
-  email: string;
-  password: string;
-}
 export function UserLoginForm({ className, ...props }: UserAuthFormProps) {
   const { toast } = useToast();
   const router = useRouter();

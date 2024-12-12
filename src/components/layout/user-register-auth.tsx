@@ -5,21 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { ToastAction } from "../ui/toast";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { IUserRegister, UserAuthFormProps } from "../../../types";
+import { ToastAction } from "../ui/toast";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-interface IUser {
-  name: string;
-  email: string;
-  password: string;
-}
 export function UserRegisterForm({ className, ...props }: UserAuthFormProps) {
   const { toast } = useToast();
   const router = useRouter();
-  const [data, setData] = useState<IUser>({
+  const [data, setData] = useState<IUserRegister>({
     name: "",
     email: "",
     password: "",

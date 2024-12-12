@@ -1,11 +1,9 @@
 "use client";
 
 import { CartProvider } from "use-shopping-cart";
+import { AppCartProviderProps } from "../../../types";
 
 const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
-interface AppCartProviderProps {
-  children: React.ReactNode;
-}
 
 export default function AppCartProvider({ children }: AppCartProviderProps) {
   return (

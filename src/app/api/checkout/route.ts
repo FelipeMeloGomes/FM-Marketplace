@@ -3,11 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Product } from "use-shopping-cart/core";
 import { validateCartItems } from "use-shopping-cart/utilities";
-
-interface CartItem {
-  value: number;
-  quantity: number;
-}
+import { CartItem } from "../../../../types";
 
 export async function POST(request: NextRequest) {
   const { cartDetails, shippingOption } = await request.json();

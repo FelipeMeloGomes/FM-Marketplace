@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,18 +12,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { formatCurrencyString, useShoppingCart } from "use-shopping-cart";
-import { Button } from "../ui/button";
-
-interface ProductCardProps {
-  id: string;
-  name: string;
-  description?: string;
-  sku?: string;
-  price: string | number;
-  currency: string;
-  image: string;
-  images?: string[];
-}
+import { ProductCardProps } from "../../../types";
 
 export default function ProductCard({
   id,

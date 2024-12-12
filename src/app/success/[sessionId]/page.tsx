@@ -3,10 +3,8 @@
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useShoppingCart } from "use-shopping-cart";
+import { SuccessProps } from "../../../../types";
 
-interface SuccessProps {
-  params: Promise<{ sessionId: string }>;
-}
 export default function Success({ params }: SuccessProps) {
   const { clearCart } = useShoppingCart();
   const [sessionId, setSessionId] = useState<string | null>(null);
