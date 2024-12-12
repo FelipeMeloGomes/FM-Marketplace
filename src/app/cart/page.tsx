@@ -1,4 +1,5 @@
 "use client";
+
 import ShippingCalculator from "@/components/layout/shipping-calculator";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +14,8 @@ import { cn } from "@/lib/utils";
 import { Loader, MinusCircle, PlusCircle, Trash2 } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
-import { useShoppingCart } from "use-shopping-cart";
+import { useMemo, useState } from "react";
+import { formatCurrencyString, useShoppingCart } from "use-shopping-cart";
 
 export default function Cart() {
   const {
@@ -31,14 +32,40 @@ export default function Cart() {
   const { toast } = useToast();
   const { status } = useSession();
 
-  const totalPrice = Object.keys(cartDetails).reduce(
-    (total, key) =>
-      total +
-      (cartDetails[key]?.value ?? 0) * (cartDetails[key]?.quantity ?? 0),
-    0,
-  );
+  const totalPrice = useMemo(() => {
+    const total = Object.keys(cartDetails).reduce(
+      (sum, key) =>
+        sum +
+        (cartDetails[key]?.value ?? 0) * (cartDetails[key]?.quantity ?? 0),
+      0,
+    );
 
-  const totalWithShipping = totalPrice + (Number(selectedShipping?.price) || 0);
+    return formatCurrencyString({
+      value: total,
+      currency: "BRL",
+      language: "pt-BR",
+    });
+  }, [cartDetails]);
+
+  const totalWithShipping = useMemo(() => {
+    const shippingPriceInCents = Math.round(
+      Number(selectedShipping?.price || 0) * 100,
+    ); // Converter frete para centavos
+    const subtotalInCents = Object.keys(cartDetails).reduce(
+      (sum, key) =>
+        sum +
+        (cartDetails[key]?.value ?? 0) * (cartDetails[key]?.quantity ?? 0),
+      0,
+    );
+
+    const totalIncludingShipping = subtotalInCents + shippingPriceInCents;
+
+    return formatCurrencyString({
+      value: totalIncludingShipping,
+      currency: "BRL",
+      language: "pt-BR",
+    });
+  }, [cartDetails, selectedShipping]);
 
   async function checkout() {
     if (status !== "authenticated") {
@@ -172,12 +199,11 @@ export default function Cart() {
             );
           })}
           <div className="text-right">
-            <p>Subtotal: R$ {totalPrice}</p>
+            <p>Subtotal: {totalPrice}</p>
             <p>
-              Frete: R${" "}
-              {selectedShipping?.price ? selectedShipping.price : "0,00"}
+              Frete: {selectedShipping?.price ? selectedShipping.price : "0,00"}
             </p>
-            <p className="font-bold">Total: R$ {totalWithShipping}</p>
+            <p className="font-bold">Total: {totalWithShipping}</p>
           </div>
         </>
       )}
