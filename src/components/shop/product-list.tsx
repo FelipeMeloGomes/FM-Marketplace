@@ -6,7 +6,7 @@ import ProductCard from "@/components/shop/product-card";
 async function getProducts() {
   try {
     const stripProducts = await stripe.products.list({
-      limit: 10,
+      limit: 100,
       expand: ["data.default_price"],
     });
 
