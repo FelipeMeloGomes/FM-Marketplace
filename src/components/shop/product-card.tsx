@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
+import { useMemo, useState } from "react";
 import { formatCurrencyString, useShoppingCart } from "use-shopping-cart";
 import { ProductCardProps } from "../../../types";
 
@@ -24,28 +25,43 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { addItem } = useShoppingCart();
   const { toast } = useToast();
+  const [isAdding, setIsAdding] = useState(false);
 
-  const formattedPrice = formatCurrencyString({
-    value: typeof price === "string" ? parseFloat(price) : price,
-    currency,
-    language: "pt-BR",
-  });
+  const formattedPrice = useMemo(() => {
+    return formatCurrencyString({
+      value: typeof price === "string" ? parseFloat(price) : price,
+      currency,
+      language: "pt-BR",
+    });
+  }, [price, currency]);
 
   async function addToCart(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    addItem({
-      name,
-      description,
-      id,
-      price: typeof price === "string" ? parseFloat(price) : price,
-      currency,
-      image,
-    });
+    setIsAdding(true);
 
-    toast({
-      title: `🎉 ${name} Adicionado`,
-      description: "Adicione mais por descontos.",
-    });
+    try {
+      addItem({
+        name,
+        description,
+        id,
+        price: typeof price === "string" ? parseFloat(price) : price,
+        currency,
+        image,
+      });
+
+      toast({
+        title: `🎉 ${name} Adicionado`,
+        description: "Adicione mais por descontos.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao adicionar ao carrinho",
+        description: "Tente novamente mais tarde.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAdding(false);
+    }
   }
 
   return (
@@ -56,7 +72,7 @@ export default function ProductCard({
         </CardTitle>
         <CardDescription className="relative w-full h-60">
           <Image
-            src={image || "/placeholder.png"}
+            src={image || ""}
             fill
             sizes="100%"
             alt={name}
@@ -69,11 +85,17 @@ export default function ProductCard({
       </CardContent>
       <CardFooter className="flex items-center justify-between">
         <div>
-          <p>Preço</p>
-          <p>{formattedPrice}</p>
+          <p className="text-sm text-muted-foreground">Preço</p>
+          <p className="font-bold">{formattedPrice}</p>
         </div>
-        <Button size={"lg"} variant={"default"} onClick={addToCart}>
-          Comprar
+        <Button
+          size={"lg"}
+          variant={"default"}
+          onClick={addToCart}
+          disabled={isAdding}
+          aria-label={`Adicionar ${name} ao carrinho`}
+        >
+          {isAdding ? "Adicionando..." : "Comprar"}
         </Button>
       </CardFooter>
     </Card>
