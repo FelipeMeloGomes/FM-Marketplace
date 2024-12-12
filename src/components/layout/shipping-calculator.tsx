@@ -112,32 +112,34 @@ export default function ShippingCalculator({
       </div>
 
       <div className="mt-4">
-        {shippingOptions.map((option) => (
-          <div
-            key={option.id}
-            className={`text-sm flex justify-between items-center space-x-2 p-2 rounded-md cursor-pointer ${
-              selectedShipping?.id === option.id
-                ? "bg-blue-200"
-                : "hover:bg-gray-300"
-            }`}
-            onClick={() => handleShippingSelect(option)}
-          >
-            {selectedShipping?.id === option.id && (
-              <span className="text-green-500 flex items-center">
-                <CheckCircle className="mr-1" />
-                Selecionado
-              </span>
-            )}
-            <div>
-              {parseInt(option.delivery_time) > 0 && (
-                <div>
-                  <strong>{option.company.name}</strong>: R$ {option.price} -{" "}
-                  {option.delivery_time} dias úteis
-                </div>
+        {shippingOptions
+          .filter((option) => Number(option.price) > 0)
+          .map((option) => (
+            <div
+              key={option.id}
+              className={`text-sm flex justify-between items-center space-x-2 p-2 rounded-md cursor-pointer ${
+                selectedShipping?.id === option.id
+                  ? "bg-blue-200"
+                  : "hover:bg-gray-300"
+              }`}
+              onClick={() => handleShippingSelect(option)}
+            >
+              {selectedShipping?.id === option.id && (
+                <span className="text-green-500 flex items-center">
+                  <CheckCircle className="mr-1" />
+                  Selecionado
+                </span>
               )}
+              <div>
+                {parseInt(option.delivery_time) > 0 && (
+                  <div>
+                    <strong>{option.company.name}</strong>: R$ {option.price} -{" "}
+                    {option.delivery_time} dias úteis
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
