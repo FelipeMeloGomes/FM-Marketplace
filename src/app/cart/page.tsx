@@ -50,7 +50,7 @@ export default function Cart() {
   const totalWithShipping = useMemo(() => {
     const shippingPriceInCents = Math.round(
       Number(selectedShipping?.price || 0) * 100,
-    ); // Converter frete para centavos
+    );
     const subtotalInCents = Object.keys(cartDetails).reduce(
       (sum, key) =>
         sum +
