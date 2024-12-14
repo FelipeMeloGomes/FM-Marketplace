@@ -33,12 +33,14 @@ export default function Cart() {
   const { status } = useSession();
 
   const totalPrice = useMemo(() => {
-    const total = Object.keys(cartDetails).reduce(
-      (sum, key) =>
-        sum +
-        (cartDetails[key]?.value ?? 0) * (cartDetails[key]?.quantity ?? 0),
-      0,
-    );
+    const total = Object.keys(cartDetails).reduce((sum, key) => {
+      const item = cartDetails[key];
+      if (item) {
+        return sum + item.value;
+      }
+
+      return sum;
+    }, 0);
 
     return formatCurrencyString({
       value: total,
@@ -52,9 +54,7 @@ export default function Cart() {
       Number(selectedShipping?.price || 0) * 100,
     );
     const subtotalInCents = Object.keys(cartDetails).reduce(
-      (sum, key) =>
-        sum +
-        (cartDetails[key]?.value ?? 0) * (cartDetails[key]?.quantity ?? 0),
+      (sum, key) => sum + (cartDetails[key]?.value ?? 0),
       0,
     );
 
