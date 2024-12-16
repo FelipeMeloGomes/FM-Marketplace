@@ -14,8 +14,16 @@ export default function CartButton() {
   }, []);
 
   return (
-    <Link href={"/cart"} className="flex items-center justify-center gap-2">
-      <ShoppingCart className="font-extrabold h-6 w-6" />
+    <Link
+      href={"/cart"}
+      className="flex items-center justify-center gap-2"
+      aria-label={
+        isClient
+          ? `Ir para o carrinho (${cartCount} produto(s))`
+          : "Carregando carrinho"
+      }
+    >
+      <ShoppingCart className="font-extrabold h-6 w-6" aria-hidden="true" />
       {isClient ? (
         <>
           <p className="text-wind">{cartCount}</p> Produto(s)
