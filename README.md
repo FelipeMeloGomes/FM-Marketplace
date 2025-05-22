@@ -1,58 +1,108 @@
-# FM Marketplace
+# 🚀 FM Marketplace
 
-O **FM Marketplace** é um projeto de **marketplace** criado com o intuito de estudar e aprimorar habilidades no desenvolvimento de aplicações web utilizando **Next.js**, **TypeScript** e **Tailwind CSS**. O projeto também integra o **Stripe** para processamento de pagamentos, oferecendo uma experiência prática em sistemas de e-commerce. O foco principal é fortalecer as competências no desenvolvimento front-end, entender melhor as funcionalidades essenciais de um marketplace e explorar as melhores práticas de integração de APIs e autenticação de usuários.
+O **FM Marketplace** é um projeto de **marketplace de eletrônicos** desenvolvido com o objetivo de aprimorar habilidades em aplicações web modernas utilizando **Next.js**, **TypeScript** e **Tailwind CSS**. A aplicação integra o **Stripe** para pagamentos online e a **API Melhor Envio** para cálculo de fretes, promovendo uma experiência prática em sistemas de e-commerce com autenticação segura, responsividade e boas práticas de código.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **[Next.js](https://nextjs.org/)** - Framework React para desenvolvimento web.
-- **[TypeScript](https://www.typescriptlang.org/)** - Superset do JavaScript que adiciona tipagem estática.
-- **[Tailwind CSS](https://tailwindcss.com/)** - Framework de CSS utilitário para estilização.
-- **[Stripe](https://stripe.com/)** - API para processamento de pagamentos.
-- **[MongoDB](https://www.mongodb.com/pt-br)** - Banco de dados NoSQL.
-- **[Prisma](https://www.prisma.io/)** - ORM (Object-Relational Mapper) para Node.js, facilitando o acesso a bancos de dados.
-- **[NextAuth](https://next-auth.js.org/)** - Sistema de autenticação para Next.js.
-- **[Bcrypt](https://www.npmjs.com/package/bcrypt)** - Biblioteca para criptografia de senhas.
-- **[Melhor Envio](https://www.melhorenvio.com.br/)** - API para cálculo de frete e envio de pacotes.
+| Tecnologia                                      | Descrição                                                             |
+| ----------------------------------------------- | --------------------------------------------------------------------- |
+| [Next.js](https://nextjs.org/)                  | Framework baseado em React para desenvolvimento web com SSR e SSG.    |
+| [TypeScript](https://www.typescriptlang.org/)   | Superset do JavaScript que adiciona tipagem estática.                 |
+| [Tailwind CSS](https://tailwindcss.com/)        | Framework de utilitários para estilização rápida e responsiva.        |
+| [Stripe](https://stripe.com/)                   | API para processamento de pagamentos online.                          |
+| [MongoDB](https://www.mongodb.com/pt-br)        | Banco de dados NoSQL orientado a documentos.                          |
+| [Prisma](https://www.prisma.io/)                | ORM para Node.js com tipagem segura e fácil acesso ao banco de dados. |
+| [NextAuth](https://next-auth.js.org/)           | Solução de autenticação completa para aplicações Next.js.             |
+| [Bcrypt](https://www.npmjs.com/package/bcrypt)  | Biblioteca para hash seguro de senhas.                                |
+| [Melhor Envio](https://www.melhorenvio.com.br/) | API para cálculo e gerenciamento de fretes.                           |
 
 ---
 
-# Funcionalidades do Marketplace de Eletrônicos
+## ⚙️ Funcionalidades
 
-- **Listagem de Produtos**: Explore uma ampla variedade de produtos disponíveis para compra.
-- **Carrinho de Compras Dinâmico**: Adicione, remova ou atualize itens no carrinho em tempo real.
-- **Pagamento Seguro**: Integração com o Stripe para garantir transações rápidas e seguras.
-- **Interface Responsiva e Moderna**: Desenvolvida com Tailwind CSS, garantindo uma ótima experiência em qualquer dispositivo.
-- **Código Escalável**: Organização eficiente em TypeScript, facilitando a manutenção e o crescimento do projeto.
-- **Cálculo de Frete Automatizado**: Integração com a API Melhor Envio para oferecer valores precisos de entrega.
-- **Sistema de Autenticação Seguro**: Implementação com NextAuth, bcrypt e MongoDB para proteger os dados dos usuários.
-
----
-
-# Novas Funcionalidades
-
-- **formatação de valores monetário**:
+| Funcionalidade               | Descrição                                                           |
+| ---------------------------- | ------------------------------------------------------------------- |
+| 🛒 **Listagem de Produtos**  | Exibição de produtos com detalhes e organização moderna.            |
+| 🧺 **Carrinho Dinâmico**     | Adição, remoção e atualização de itens em tempo real.               |
+| 💳 **Pagamento Seguro**      | Integração com Stripe para garantir transações seguras.             |
+| 📱 **Design Responsivo**     | Interface moderna com adaptação a diferentes dispositivos.          |
+| 🧩 **Código Escalável**      | Arquitetura modular em TypeScript com boas práticas.                |
+| 🚚 **Cálculo de Frete**      | Integração com a API Melhor Envio para cálculo automático de frete. |
+| 🔐 **Autenticação Segura**   | Sistema de login com NextAuth, bcrypt e MongoDB.                    |
+| 💲 **Formatação de Valores** | Apresentação padronizada de valores monetários.                     |
 
 ---
 
-## 📂 Estrutura de Diretórios
+## 📁 Estrutura de Diretórios
 
 ```bash
 ├── public/         # Recursos estáticos como imagens e ícones.
 ├── src/
 │   ├── components/ # Componentes reutilizáveis da aplicação.
-│   ├── app/        # Páginas do Next.js.
-│   ├── styles/     # Estilos globais e configurações do Tailwind CSS.
-│   ├── utils/      # Funções auxiliares e configuração do Stripe.
-│   └── types/      # Definições de tipos TypeScript.
-└── README.md       # Este arquivo.
+│   ├── app/        # Estrutura de rotas e páginas do Next.js.
+│   ├── styles/     # Estilos globais e configuração do Tailwind CSS.
+│   ├── utils/      # Funções auxiliares e integração com APIs externas.
+│   └── types/      # Tipagens e interfaces em TypeScript.
+└── README.md       # Documentação do projeto.
 ```
 
 ---
 
-## 🛡️ Segurança
+## 📦 Instalação
 
-- Certifique-se de nunca expor sua chave secreta do Stripe em código público. Utilize variáveis de ambiente e boas práticas de segurança.
+Para clonar e instalar o projeto localmente:
+
+```bash
+git clone https://github.com/seu-usuario/fm-marketplace.git
+cd fm-marketplace
+npm install
+```
 
 ---
+
+## ▶️ Execução do Projeto
+
+Para rodar o projeto em ambiente de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+Acesse [http://localhost:3000](http://localhost:3000) no navegador.
+
+---
+
+## 🚀 Deploy
+
+Este projeto pode ser facilmente implantado em plataformas como:
+
+- [Vercel](https://vercel.com/)
+- [Netlify](https://www.netlify.com/)
+- [Render](https://render.com/)
+
+Certifique-se de configurar as variáveis de ambiente corretamente no painel de deploy.
+
+---
+
+## 🔐 Segurança
+
+- 🔑 **Nunca exponha chaves sensíveis**, como a `SECRET_KEY` do Stripe. Utilize variáveis de ambiente (`.env`) e mantenha-as fora do controle de versão.
+- ⚠️ Adote práticas como HTTPS, CORS configurado corretamente e validações no back-end.
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+---
+
+## ✨ Autor
+
+Desenvolvido com 💻 por **Felipe Melo**.
+
+- [Portfólio](https://portfoliofmg.netlify.app)
+- [GitHub](https://github.com/FelipeMeloGomes)
+- Contato: [WhatsApp](https://wa.me/556492600637)
