@@ -40,7 +40,7 @@ export default async function Login() {
           </div>
           <UserLoginForm />
           <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{" "}
+            Ao clicar em continuar, você concorda com nossos{" "}
             <Link
               href="/terms"
               className="underline underline-offset-4 hover:text-primary"
