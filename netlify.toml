@@ -1,7 +1,0 @@
-[build]
-  command = "npx prisma generate && npm run build && pnpm build"
-  publish = ".next"
-  environment = { NODE_VERSION = "18", NPM_FLAGS = "--legacy-peer-deps" }
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
