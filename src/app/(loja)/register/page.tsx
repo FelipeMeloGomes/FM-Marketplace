@@ -1,5 +1,6 @@
 import AuthButton from "@/components/layout/auth-button";
 import { UserRegisterForm } from "@/components/layout/user-register-auth";
+import WelcomeMessage from "@/components/ui/message";
 import { Command } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -19,16 +20,7 @@ export default async function Register() {
         <div className="relative z-20 flex items-center text-lg font-medium">
           <Command className="mr-2 h-6 w-6" /> FM MKT
         </div>
-        <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
-            <p className="text-lg">
-              Bem-vindo ao Marketplace de Eletrônicos! Esta aplicação é um guia
-              prático para utilizar o Next-Auth (Auth.js) em integração com
-              Prisma (MongoDB) e Next.js 13.4+.
-            </p>
-            <footer className="text-sm">Felipe Melo</footer>
-          </blockquote>
-        </div>
+        <WelcomeMessage />
       </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -42,7 +34,7 @@ export default async function Register() {
           </div>
           <UserRegisterForm />
           <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{" "}
+            Ao clicar em continuar, você concorda com nossos{" "}
             <Link
               href="/terms"
               className="underline underline-offset-4 hover:text-primary"
