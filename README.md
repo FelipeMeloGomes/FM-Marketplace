@@ -22,16 +22,17 @@ O **FM Marketplace** é um projeto de **marketplace de eletrônicos** desenvolvi
 
 ## ⚙️ Funcionalidades
 
-| Funcionalidade               | Descrição                                                           |
-| ---------------------------- | ------------------------------------------------------------------- |
-| 🛒 **Listagem de Produtos**  | Exibição de produtos com detalhes e organização moderna.            |
-| 🧺 **Carrinho Dinâmico**     | Adição, remoção e atualização de itens em tempo real.               |
-| 💳 **Pagamento Seguro**      | Integração com Stripe para garantir transações seguras.             |
-| 📱 **Design Responsivo**     | Interface moderna com adaptação a diferentes dispositivos.          |
-| 🧩 **Código Escalável**      | Arquitetura modular em TypeScript com boas práticas.                |
-| 🚚 **Cálculo de Frete**      | Integração com a API Melhor Envio para cálculo automático de frete. |
-| 🔐 **Autenticação Segura**   | Sistema de login com NextAuth, bcrypt e MongoDB.                    |
-| 💲 **Formatação de Valores** | Apresentação padronizada de valores monetários.                     |
+| Funcionalidade               | Descrição                                                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 🛒 **Listagem de Produtos**  | Exibição de produtos com detalhes e organização moderna.                                                                       |
+| 🔍 Pesquisa de Produtos      | Busca dinâmica por nome, categoria ou características, filtrando resultados em tempo real para facilitar a localização rápida. |
+| 🧺 **Carrinho Dinâmico**     | Adição, remoção e atualização de itens em tempo real.                                                                          |
+| 💳 **Pagamento Seguro**      | Integração com Stripe para garantir transações seguras.                                                                        |
+| 📱 **Design Responsivo**     | Interface moderna com adaptação a diferentes dispositivos.                                                                     |
+| 🧩 **Código Escalável**      | Arquitetura modular em TypeScript com boas práticas.                                                                           |
+| 🚚 **Cálculo de Frete**      | Integração com a API Melhor Envio para cálculo automático de frete.                                                            |
+| 🔐 **Autenticação Segura**   | Sistema de login com NextAuth, bcrypt e MongoDB.                                                                               |
+| 💲 **Formatação de Valores** | Apresentação padronizada de valores monetários.                                                                                |
 
 ---
 
